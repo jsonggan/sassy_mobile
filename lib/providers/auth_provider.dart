@@ -104,9 +104,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> setEventCode(eventCode) async {
-    final pref = await SharedPreferences.getInstance();
-    print('DOES IT SUCCESSFULLY SET EVENT CODE?');
     this.eventCode = eventCode;
+    final pref = await SharedPreferences.getInstance();
 
     pref.setString('EventCode', eventCode);
     print(this.eventCode);

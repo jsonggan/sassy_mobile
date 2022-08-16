@@ -169,10 +169,6 @@ class _SelectEventState extends State<SelectEvent> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         Navigator.pushNamed(context, RegisterPage.routeName);
       } else {
-        //Shared preferences didn't update instantly, add duration for it to progress (I GUESS)(CANT GET ANYTHING FROM GOOGLE)
-        await Future.delayed(Duration(seconds: 2));
-        //
-
         //get data for home page
         await Provider.of<SponsorsProvider>(context, listen: false)
             .getSponsors();
