@@ -24,7 +24,6 @@ import 'package:sassy_mobile/screens/sign_in/sign_in.dart';
 import 'package:sassy_mobile/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:sassy_mobile/screens/verification_code/verification_code.dart';
-import 'package:sassy_mobile/temp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // void main() => runApp(const MyApp());

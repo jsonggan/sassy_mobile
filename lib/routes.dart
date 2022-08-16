@@ -24,7 +24,6 @@ import 'package:sassy_mobile/screens/main_content/sessions/sessions.dart';
 import 'package:sassy_mobile/screens/sign_in/sign_in.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sassy_mobile/screens/verification_code/verification_code.dart';
-import 'package:sassy_mobile/temp.dart';
 
 final Map<String, WidgetBuilder> routes = {
   SignInPage.routeName: (context) {
@@ -62,5 +61,4 @@ final Map<String, WidgetBuilder> routes = {
   SponsorsPage.routeName: (context) => SponsorsPage(),
   QrCodePage.routeName: (context) => QrCodePage(),
   SpeakerProfilePage.routeName: (context) => SpeakerProfilePage(),
-  Temp.routeName: (context) => Temp(),
 };

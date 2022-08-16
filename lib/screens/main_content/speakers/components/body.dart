@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:sassy_mobile/models/category/agenda_category.dart';
 import 'package:sassy_mobile/app_theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:sassy_mobile/providers/speakers_provider.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sassy_mobile/models/category/agenda_category.dart';
 import 'package:sassy_mobile/screens/main_content/attendees/trip.dart';
 import 'package:sassy_mobile/app_theme.dart';
 // import 'package:sassy_mobile/models/app_theme.dart';

@@ -1,16 +1,30 @@
 # sassy_mobile
 
-A new Flutter project.
+Use this file to initialize a flutter app.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### 1. Change project name.
 
-A few resources to get you started if this is your first Flutter project:
+- use Ctrl + Shift + H, replace sassy_mobile by [yourNewProjectName] (for Visual Studio Code user)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## File Description
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 1. Save all images/icons/fonts under asset folder
+
+### 2. lib/providers
+
+- write all your provider here
+
+### 3. lib/screens
+
+- keep [fileName.dart] as simple as posible
+- make sure all the file have components/body.dart to run everything
+
+### 4. lib/services
+
+- save all the api request here
+
+### 5. lib/widgets
+
+- save all the reusable widget here
