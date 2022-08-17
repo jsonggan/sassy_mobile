@@ -6,12 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:sassy_mobile/app_theme.dart';
 import 'package:sassy_mobile/providers/auth_provider.dart';
 import 'package:sassy_mobile/providers/event_provider.dart';
-import 'package:sassy_mobile/providers/user_provider.dart';
 import 'package:sassy_mobile/screens/select_event/select_event.dart';
-import 'package:sassy_mobile/screens/verification_code/components/num_input_field.dart';
 
 import 'package:sassy_mobile/widgets/custom_button.dart';
-import 'resend_otp.dart';
+import 'package:sassy_mobile/widgets/snack_bar.dart';
 import 'package:sassy_mobile/widgets/text_input_field.dart';
 
 class VerificationCode extends StatefulWidget {
@@ -113,44 +111,18 @@ class _VerificationCodeState extends State<VerificationCode> {
     print('go into veri code submit function');
     final isValidForm = _formKey.currentState!.validate();
     if (isValidForm) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          shape: StadiumBorder(),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: cardColorDark,
-          content: SizedBox(
-            height: 25,
-            child: SpinKitThreeBounce(
-              size: 13,
-              color: textColorWhite,
-            ),
-          ),
-          duration: Duration(seconds: 15),
-        ),
-      );
+      CustomSnackBar.showLoading(context);
+
       final AuthProvider provider =
           Provider.of<AuthProvider>(context, listen: false);
 
       await provider.loginStep2(
           provider.email, verificationCodeController.text);
       Map<String, dynamic> mapUserDetail = provider.mapUserDetail;
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          shape: StadiumBorder(),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: cardColorDark,
-          content: Text(mapUserDetail['message'],
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: textColorWhite)),
-          duration: Duration(seconds: 2),
-        ),
-      );
 
-      print('CHECK THIS');
-      print(mapUserDetail['message']);
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      CustomSnackBar.showMessage(context, mapUserDetail['message']);
+
       if (mapUserDetail['message'] == 'Successfully logged in!') {
         await Provider.of<EventProvider>(context, listen: false)
             .getUserRegisteredEvents();
@@ -160,41 +132,15 @@ class _VerificationCodeState extends State<VerificationCode> {
   }
 
   Future<void> resendOtp() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        shape: StadiumBorder(),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: cardColorDark,
-        content: SizedBox(
-          height: 25,
-          child: SpinKitThreeBounce(
-            size: 13,
-            color: textColorWhite,
-          ),
-        ),
-        duration: Duration(seconds: 15),
-      ),
-    );
-    print('go into resend otp function');
+    CustomSnackBar.showLoading(context);
+
     final AuthProvider provider =
         Provider.of<AuthProvider>(context, listen: false);
     await provider.loginResendMFA(provider.email);
     Map<String, dynamic> mapResendMFA = provider.mapResendMFA;
-    print(mapResendMFA['message']);
     await Future.delayed(const Duration(seconds: 1));
+
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        shape: StadiumBorder(),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: cardColorDark,
-        content: Text(mapResendMFA['message'].toString(),
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: textColorWhite)),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    CustomSnackBar.showMessage(context, mapResendMFA['message'].toString());
   }
 }

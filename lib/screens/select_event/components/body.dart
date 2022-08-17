@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:sassy_mobile/app_theme.dart';
 import 'package:sassy_mobile/providers/auth_provider.dart';
@@ -13,6 +12,7 @@ import 'package:sassy_mobile/screens/main_home/main_home.dart';
 import 'package:sassy_mobile/screens/register/register.dart';
 import 'package:sassy_mobile/widgets/custom_button.dart';
 import 'package:sassy_mobile/widgets/dropdown.dart';
+import 'package:sassy_mobile/widgets/snack_bar.dart';
 import 'package:sassy_mobile/widgets/text_input_field.dart';
 
 class SelectEvent extends StatefulWidget {
@@ -31,100 +31,84 @@ class _SelectEventState extends State<SelectEvent> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(flex: 6),
-              Text(
-                'Welcome!',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Spacer(flex: 6),
+            Text(
+              'Welcome!',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: textColorWhite),
+            ),
+            const Spacer(flex: 3),
+            Text('Please select an event or enter a unique event code',
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
-                    .copyWith(color: textColorWhite),
+                    .bodyMedium!
+                    .copyWith(color: textColorGreyLight)),
+            const Spacer(flex: 3),
+            DropDown(
+              items: Provider.of<EventProvider>(context, listen: false)
+                      .listOfEventName
+                      .isEmpty
+                  ? ['None']
+                  : Provider.of<EventProvider>(context, listen: false)
+                      .listOfEventName,
+              text: 'Event Name',
+              isSelect:
+                  Provider.of<SelectEventName>(context, listen: false).isSelect,
+              fieldText: Provider.of<SelectEventName>(context).eventName,
+              color: cardColorDark,
+              textColor: textColorGreyLight,
+              textColorItem: textColorWhite,
+            ),
+            const Spacer(flex: 2),
+            Center(
+              child: Text(
+                'OR',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Color(0xFF666666)),
               ),
-              const Spacer(flex: 3),
-              Text('Please select an event or enter a unique event code',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: textColorGreyLight)),
-              const Spacer(flex: 3),
-              DropDown(
-                items: Provider.of<EventProvider>(context, listen: false)
-                        .listOfEventName
-                        .isEmpty
-                    ? ['None']
-                    : Provider.of<EventProvider>(context, listen: false)
-                        .listOfEventName,
-                text: 'Event Name',
-                isSelect: Provider.of<SelectEventName>(context, listen: false)
-                    .isSelect,
-                fieldText: Provider.of<SelectEventName>(context).eventName,
-                color: cardColorDark,
-                textColor: textColorGreyLight,
-                textColorItem: textColorWhite,
-              ),
-              const Spacer(flex: 2),
-              Center(
-                child: Text(
-                  'OR',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Color(0xFF666666)),
-                ),
-              ),
-              const Spacer(flex: 2),
-              TextInputField(
-                type: 'Event Code',
-                controller: eventCodeController,
-                validator: (value) {
-                  return null;
-                },
-              ),
-              const Spacer(flex: 25),
-              CustomButton(
-                  color: yellowCardColor,
-                  text: "Continue",
-                  press: !_isPress
-                      ? () {
+            ),
+            const Spacer(flex: 2),
+            TextInputField(
+              type: 'Event Code',
+              controller: eventCodeController,
+              validator: (value) {
+                return null;
+              },
+            ),
+            const Spacer(flex: 25),
+            CustomButton(
+                color: yellowCardColor,
+                text: "Continue",
+                press: !_isPress
+                    ? () {
+                        setState(() {
+                          _isPress = true;
+                        });
+                        Timer(const Duration(seconds: 1), () {
                           setState(() {
-                            _isPress = true;
+                            _isPress = false;
                           });
-                          Timer(const Duration(seconds: 1), () {
-                            setState(() {
-                              _isPress = false;
-                            });
-                          });
-                          next();
-                        }
-                      : null),
-              const Spacer(flex: 2),
-            ],
-          ),
+                        });
+                        next();
+                      }
+                    : null),
+            const Spacer(flex: 2),
+          ],
         ),
       ),
     );
   }
 
   Future<void> next() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        shape: StadiumBorder(),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: cardColorDark,
-        content: SizedBox(
-          height: 25,
-          child: SpinKitThreeBounce(
-            size: 13,
-            color: textColorWhite,
-          ),
-        ),
-        duration: Duration(seconds: 20),
-      ),
-    );
+    CustomSnackBar.showLoading(context);
     EventProvider providerEvent =
         Provider.of<EventProvider>(context, listen: false);
 
@@ -180,20 +164,7 @@ class _SelectEventState extends State<SelectEvent> {
       }
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          shape: StadiumBorder(),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: cardColorDark,
-          content: Text(errorMsg,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: textColorWhite)),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      CustomSnackBar.showMessage(context, errorMsg);
     }
   }
 }

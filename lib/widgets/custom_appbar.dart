@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 class CustomTopAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => Size.fromHeight(60.0);
+  Size get preferredSize => const Size.fromHeight(60.0);
 
   const CustomTopAppBar({
     Key? key,

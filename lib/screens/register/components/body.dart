@@ -1,27 +1,22 @@
-import 'dart:io';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sassy_mobile/app_theme.dart';
 import 'package:sassy_mobile/providers/auth_provider.dart';
 import 'package:sassy_mobile/providers/select_dropdown/select_country.dart';
-import 'package:sassy_mobile/providers/select_dropdown/select_picture.dart';
 import 'package:sassy_mobile/providers/select_dropdown/select_profession.dart';
 import 'package:sassy_mobile/providers/select_dropdown/select_salutation.dart';
 import 'package:sassy_mobile/providers/speakers_provider.dart';
 import 'package:sassy_mobile/providers/sponsors_provider.dart';
 import 'package:sassy_mobile/providers/user_provider.dart';
 import 'package:sassy_mobile/screens/main_home/main_home.dart';
-import 'package:sassy_mobile/screens/sign_in/sign_in.dart';
 import 'package:sassy_mobile/widgets/custom_card.dart';
 import 'package:sassy_mobile/widgets/dropdown.dart';
 import 'package:sassy_mobile/widgets/custom_button.dart';
+import 'package:sassy_mobile/widgets/snack_bar.dart';
 import 'input_data.dart';
 import 'package:sassy_mobile/widgets/text_input_field.dart';
 import 'package:image/image.dart' as Img;
-import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -274,44 +269,22 @@ class _RegisterState extends State<Register> {
           Provider.of<SelectProfession>(context, listen: false)
                   .boolShowErrorMsg ==
               false) {
-        try {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              shape: StadiumBorder(),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: cardColorDark,
-              content: SizedBox(
-                height: 25,
-                child: SpinKitThreeBounce(
-                  size: 13,
-                  color: textColorWhite,
-                ),
-              ),
-              duration: Duration(seconds: 15),
-            ),
-          );
-          print('pass through submit function');
+        CustomSnackBar.showLoading(context);
+        print('pass through submit function');
 
-          await provider.register(
-              Provider.of<SelectSalutation>(context, listen: false).salutation,
-              firstNameController.text,
-              lastNameController.text,
-              Provider.of<AuthProvider>(context, listen: false).email,
-              hospitalInstitutionController.text,
-              mcrSnbNumberController.text,
-              Provider.of<SelectCountry>(context, listen: false).country,
-              Provider.of<SelectProfession>(context, listen: false).profession,
-              dietaryRestrictionsController.text.isEmpty ||
-                      dietaryRestrictionsController.text == null
-                  ? 'None'
-                  : dietaryRestrictionsController.text);
-
-          print('pass through submit function2');
-        } catch (Exception) {
-          // errorMassage = Exception.toString().replaceAll('Exception: ', '');
-          print('Have error in submit function');
-          print(Exception);
-        }
+        await provider.register(
+            Provider.of<SelectSalutation>(context, listen: false).salutation,
+            firstNameController.text,
+            lastNameController.text,
+            Provider.of<AuthProvider>(context, listen: false).email,
+            hospitalInstitutionController.text,
+            mcrSnbNumberController.text,
+            Provider.of<SelectCountry>(context, listen: false).country,
+            Provider.of<SelectProfession>(context, listen: false).profession,
+            dietaryRestrictionsController.text.isEmpty ||
+                    dietaryRestrictionsController.text == null
+                ? 'None'
+                : dietaryRestrictionsController.text);
 
         if (provider.mapRegister['message'].toString() ==
             'You have successfully registered for this event!') {

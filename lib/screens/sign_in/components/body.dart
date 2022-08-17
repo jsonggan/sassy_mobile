@@ -8,6 +8,7 @@ import 'package:sassy_mobile/screens/verification_code/verification_code.dart';
 import 'package:sassy_mobile/widgets/custom_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:sassy_mobile/widgets/snack_bar.dart';
 import 'package:sassy_mobile/widgets/text_input_field.dart';
 
 class SignInEmail extends StatefulWidget {
@@ -81,48 +82,16 @@ class _SignInEmailState extends State<SignInEmail> {
   Future<void> next() async {
     final isValidForm = _formKey.currentState!.validate();
     if (isValidForm) {
-      //loading snack bar
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          shape: StadiumBorder(),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: cardColorDark,
-          content: SizedBox(
-            height: 25,
-            child: SpinKitThreeBounce(
-              size: 13,
-              color: textColorWhite,
-            ),
-          ),
-          duration: Duration(seconds: 15),
-        ),
-      );
-      //
+      CustomSnackBar.showLoading(context);
+
       final AuthProvider provider =
           Provider.of<AuthProvider>(context, listen: false);
 
       await provider.loginStep1(emailController.text);
-      print(provider.msgLogin1);
 
-      //hide snack bar
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
-      //message snack bar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          shape: StadiumBorder(),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: cardColorDark,
-          content: Text(
-              Provider.of<AuthProvider>(context, listen: false).msgLogin1,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: textColorWhite)),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      //
+      CustomSnackBar.showMessage(
+          context, Provider.of<AuthProvider>(context, listen: false).msgLogin1);
 
       provider.msgLogin1 == 'Your 2FA has been sent to your email address.'
           ? Navigator.pushReplacementNamed(
